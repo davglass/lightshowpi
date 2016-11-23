@@ -44,14 +44,14 @@ Map the pins from the Pi to the Relays, [guide here](https://bitbucket.org/togil
 Usage
 -----
 
-Now, install Raspian on your pi, install LightShowPi
+Now, install Raspian on your pi, install [LightShowPi](http://lightshowpi.org/)
 
 Config
 ------
 
 * Set volume higher on boot
-  * sudo crontab -e 
-  * @reboot /usr/bin/amixer set PCM 95%
+  * `sudo crontab -e`
+  * `@reboot /usr/bin/amixer set PCM 95%`
 
 `~/lights.cfg`
 
@@ -75,3 +75,5 @@ pin_modes = pwm
 
 
 [Additional Wiring Diagram from here](https://www.dropbox.com/s/tamanbq64qid30b/LightshowPi-Configandwire.docx?dl=0)
+
+Content [Licensed BSD](LICENSE), use it as you will!
