@@ -109,6 +109,27 @@ You can (sort of) protect it with a JSON file: `/home/pi/.api.json`
 
 I added an IFTTT trigger to Alexa that points to my API so that I can turn them on and off with my Echo's.
 
+Twitter
+-------
+
+Create an App, then get your tokens..
+
+Create a file: `/home/pi/.twitter.json`:
+
+```json
+{
+    "api": {
+        "key": "",
+        "secret": ""
+    },
+    "access": {
+        "token": "",
+        "secret": ""
+    }
+}
+```
+
+
 [Additional Wiring Diagram from here](https://www.dropbox.com/s/tamanbq64qid30b/LightshowPi-Configandwire.docx?dl=0)
 
 Content [Licensed BSD](LICENSE), use it as you will!
