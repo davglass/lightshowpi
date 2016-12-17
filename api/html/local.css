@@ -1,0 +1,104 @@
+h1 {
+    margin: 0;
+    padding: 0;
+    background-color: #7e0b1b;
+    color: white;
+    border-bottom: 2px solid black;
+    font-size: 150%;
+    text-shadow: #000 1px 0 15px;
+}
+
+h1.disabled {
+    text-decoration: line-through;
+}
+
+h1 img {
+    vertical-align: middle;
+    border-right: 1px solid white;
+}
+
+a {
+    color: #c61931;
+    text-decoration: none;
+    border: 1px solid white;
+}
+
+a:hover {
+    border: 1px dashed #ccc;
+}
+
+#content {
+    margin: 2em;
+}
+
+#lights {
+    list-style-type: none;
+}
+
+#lights li {
+    border-radius: 50%;
+    border: 1px solid black;
+    width: 30px;
+    margin-bottom: 8px;
+    text-align: center;
+    background-color: #ccc;
+    box-shadow: 5px 5px 5px #ccc;
+}
+
+#lights li.on {
+    color: white;
+    background-color: red;
+}
+
+#lights #lights_boot.on {
+    background-color: green;
+}
+
+#lights #lights_pattern.on {
+    background-color: blue;
+}
+
+#message {
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: orange;
+    color: white;
+    width: 300px;
+    text-align: center;
+    padding: 5px;
+    position: absolute;
+    top: 40px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+}
+
+#message.hide {
+    transition: opacity 0.5s ease-in;
+    opacity: 0
+}
+
+#playing {
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #dde4e9;
+    text-align: center;
+    padding: 5px;
+    box-shadow: 5px 5px 5px #ccc;
+}
+
+#actions, #actions ul {
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+#actions li {
+    padding-left: 3px;
+    margin-bottom: 3px;
+    border-left: 10px solid white;
+}
+
+#actions li.on {
+    border-left: 10px solid green;
+}

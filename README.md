@@ -58,6 +58,9 @@ Config
 This is my default config, it fires up [`shairport-sync`](https://github.com/mikebrady/shairport-sync) and enables it as an AirPlay speaker. Then you 
 can join it from any iOS device and stream music (Spotify in our case) directly into the lights display.
 
+I also install the [`shairport-sync-metadata-reader`](https://github.com/mikebrady/shairport-sync-metadata-reader) module to grab the music
+meta data while streaming..
+
 ```
 [lightshow]
 # We are using shairport-sync to setup an AirPlay Speaker
@@ -69,8 +72,6 @@ use_fifo = False
 input_channels = 2
 input_sample_rate = 44100
 
-[hardware]
-pin_modes = pwm
 ```
 
 

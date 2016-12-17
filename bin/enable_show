@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo rm /home/pi/tmp/lightshow_disabled

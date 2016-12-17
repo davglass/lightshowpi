@@ -1,0 +1,20 @@
+#!/bin/bash
+
+background=$1
+
+for OUTPUT in $(pgrep -f hardware_controller); do
+    if [ ${OUTPUT} != $$ ]; then
+        out=`ps -p ${OUTPUT} -o cmd`
+
+        echo "killing:"
+        echo  ${out}
+
+        sudo kill -9 ${OUTPUT}
+    fi
+done
+
+sudo /home/pi/bin/light.py 26 --off
+
+if [ "$background" == "" ]; then
+    echo "none" > /home/pi/tmp/lightshow_command
+fi

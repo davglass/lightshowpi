@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo touch /home/pi/tmp/lightshow_disabled
+sudo chmod a+w /home/pi/tmp/lightshow_disabled

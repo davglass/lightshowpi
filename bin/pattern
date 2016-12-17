@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SYNCHRONIZED_LIGHTS_HOME=/home/pi/lightshowpi
+export SYNCHRONIZED_LIGHTS_HOME
+
+state=$1
+
+if [ "${state}" == "" ]; then
+    echo "USAGE: pattern <state>"
+    echo "      pattern on"
+    echo "      pattern cylon"
+    exit 1;
+fi
+
+log=/var/log/lights/controller.log
+
+sudo touch ${log}
+sudo chmod a+w ${log}
+
+/home/pi/bin/stop_controller 2>&1 >> ${log}
+
+wait
+sudo /home/pi/bin/light.py 26
+
+sudo python $SYNCHRONIZED_LIGHTS_HOME/py/hardware_controller.py --state ${state} 2>&1 >> ${log} &
+
+echo "${state}" > /home/pi/tmp/lightshow_command

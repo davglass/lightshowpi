@@ -1,0 +1,58 @@
+#!/bin/bash
+
+SYNCHRONIZED_LIGHTS_HOME=/home/pi/lightshowpi
+export SYNCHRONIZED_LIGHTS_HOME
+
+
+sudo $SYNCHRONIZED_LIGHTS_HOME/bin/stop_music_and_lights
+
+wait
+id=$1
+
+if [ -z "$id" ]; then
+    id="xxxx"
+fi
+for OUTPUT in $(pgrep -f shairport); do
+    if [ ${OUTPUT} != ${id} ] && [ ${OUTPUT} != $$ ]; then
+        out=`ps -p ${OUTPUT} -o cmd`
+
+        echo "killing:"
+        echo  ${out}
+
+        sudo kill -9 ${OUTPUT}
+
+    fi
+done
+for OUTPUT in $(pgrep -f pipe_music_meta); do
+    if [ ${OUTPUT} != ${id} ] && [ ${OUTPUT} != $$ ]; then
+        out=`ps -p ${OUTPUT} -o cmd`
+
+        echo "killing:"
+        echo  ${out}
+
+        sudo kill -9 ${OUTPUT}
+
+    fi
+done
+
+sleep 2
+
+sudo service avahi-daemon restart
+
+sudo /home/pi/bin/light.py 26 --off
+
+/home/pi/bin/smartthings.py --off
+
+pipe=/home/pi/tmp/shairport-meta
+
+if [ -p ${pipe} ]; then
+    sudo rm ${pipe}
+fi
+
+if [ -f /tmp/audio ]; then 
+    sudo rm /tmp/audio
+fi
+
+sudo chmod a+w /home/pi/api/html/music.json
+echo "{}" > /home/pi/api/html/music.json
+echo "none" > /home/pi/tmp/lightshow_command

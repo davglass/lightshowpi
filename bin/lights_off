@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SYNCHRONIZED_LIGHTS_HOME=/home/pi/lightshowpi
+export SYNCHRONIZED_LIGHTS_HOME
+
+sudo python $SYNCHRONIZED_LIGHTS_HOME/py/hardware_controller.py --state off
+
+echo "none" > /home/pi/tmp/lightshow_command

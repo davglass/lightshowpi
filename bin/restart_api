@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Stopping API Server.."
+/home/pi/bin/stop_api
+
+sleep 1
+
+/home/pi/bin/start_api
+echo "Started API Server.."

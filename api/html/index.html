@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{hostname}}.local API</title>
+    <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="/local.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1><img src="/logo-black.png"> {{hostname}}.local API</h1>
+<div id="content">
+    <div id="playing">
+        &#127932; <span>No music currently playing..</span> &#9836;&#9834;
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <h2>Actions</h2>
+            <ul id="actions">
+                <li>Show:
+                    <ul>
+                        <li id="show_on"><a href="/show/start"><img src="/play.gif" height="17" valign="middle"> Start Show</a></li>
+                        <li><a href="/show/stop"><img src="/stop.gif" height="17" valign="middle"> Stop Show</a></li>
+                        <li id="enable"><a href="/show/disable"><img src="/stop.gif" height="17" valign="middle"> Disable Show</a></li>
+                    </ul>
+                </li>
+                <li>Lights:
+                    <ul>
+                        <li id="lights_on"><a href="/lights/on"><img src="/on.png" height="17" valign="middle"> Turn On</a></li>
+                        <li><a href="/lights/off"><img src="/off.png" height="17" valign="middle"> Turn Off</a></li>
+                    </ul>
+                </li>
+                <li>Effects:
+                    <ul>
+                        <li id="cylon"><a href="/controller/cylon"><img src="/effects.jpg" height="17" valign="middle"> Cylon</a></li>
+                        <li id="dance"><a href="/controller/dance"><img src="/effects.jpg" height="17" valign="middle"> Dance</a></li>
+                        <li id="flash"><a href="/controller/flash"><img src="/effects.jpg" height="17" valign="middle"> Flash</a></li>
+                        <li id="random_pattern"><a href="/controller/random_pattern"><img src="/effects.jpg" height="17" valign="middle"> Random</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="pure-u-1-2">
+            <h2>Lights</h2>
+            <ul id="lights">
+                <li id="lights_boot" class="on">B</li>
+                <li id="lights_pattern">P</li>
+                <li id="pins_1">1</li>
+                <li id="pins_2">2</li>
+                <li id="pins_3">3</li>
+                <li id="pins_4">4</li>
+                <li id="pins_5">5</li>
+                <li id="pins_6">6</li>
+                <li id="pins_7">7</li>
+                <li id="pins_8">8</li>
+            </ul>
+        </div>
+    </div>
+    <small><em></em></small>
+    <div id="message" class="hide">Nothing to see here!</div>
+</div>
+<script src="/local.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+pipe=/home/pi/tmp/shairport-meta
+
+while [ ! -p ${pipe} ]
+do
+  sleep 1
+done
+
+/usr/local/bin/shairport-sync-metadata-reader < ${pipe}

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+base="/var/log/tweets"
+
+if [ ! -f /home/pi/.twitter.json ]; then
+    echo "Could not locate the twitter config file, aborting.."
+    exit 1;
+fi
+
+if [ ! -d ${base} ]; then
+    sudo mkdir ${base};
+fi
+
+sudo touch ${base}/error.log
+
+sudo chmod -R a+w ${base}
+sudo chown -R pi ${base}/*.log
+
+sudo /usr/bin/python /home/pi/bin/detect_changes.py 2>&1 >>${base}/error.log &

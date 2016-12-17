@@ -1,0 +1,24 @@
+#!/bin/bash
+
+SYNCHRONIZED_LIGHTS_HOME=/home/pi/lightshowpi
+export SYNCHRONIZED_LIGHTS_HOME
+
+wait
+
+pipe=/home/pi/tmp/shairport-meta
+
+if [ -p ${pipe} ]; then
+    sudo rm ${pipe}
+fi
+
+if [ -f /tmp/audio ]; then 
+    sudo rm /tmp/audio
+fi
+
+sudo /home/pi/bin/light.py 26
+
+$SYNCHRONIZED_LIGHTS_HOME/bin/start_music_and_lights
+
+/home/pi/bin/smartthings.py
+sudo /home/pi/bin/music-meta.py &
+echo "show" > /home/pi/tmp/lightshow_command

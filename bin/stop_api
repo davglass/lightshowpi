@@ -1,0 +1,18 @@
+#!/bin/bash
+
+id=$1
+
+if [ -z "$id" ]; then
+    id="xxxx"
+fi
+for OUTPUT in $(pgrep -f "python /home/pi/api/api_server.py"); do
+    if [ ${OUTPUT} != ${id} ] && [ ${OUTPUT} != $$ ] && [ ${OUTPUT} != "" ]; then
+        out=`ps -p ${OUTPUT} -o cmd`
+
+        echo "killing:"
+        echo  ${out}
+
+        sudo kill -9 ${OUTPUT}
+
+    fi
+done
