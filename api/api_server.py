@@ -46,11 +46,14 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         return 'HackSI LightShow UI'
 
     def log_message(self, format, *args):
+        agent = 'Unknown'
+        if 'user-agent' in self.headers:
+            agent = self.headers['user-agent']
         sys.stdout.write("%s - - [%s] %s %s\n" %
                     (self.address_string(),
                         self.log_date_time_string(),
                         format%args,
-                        str(self.headers['user-agent'])))
+                        str(agent)))
         sys.stdout.flush()
 
     def log_message_error(self, format, *args):

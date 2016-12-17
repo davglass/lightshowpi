@@ -74,6 +74,40 @@ input_sample_rate = 44100
 
 ```
 
+My Additions
+------------
+
+Copy `./bin` and `./api` into `/home/pi/`
+
+`mkdir /home/pi/tmp`
+
+Add `/home/pi/bin/boot.sh` to your `/etc/rc.local`
+
+This will fire up the web based API server at: `http://raspberrypi.local:8888/`
+
+Endpoints:
+
+* `/show/start`
+* `/show/stop`
+* `/show/enable`
+* `/show/disable`
+* `/lights/on`
+* `/lights/off`
+* `/controller/cylon`
+* `/controller/dance`
+* `/controller/flash`
+* `/controller/random_pattern`
+
+You can (sort of) protect it with a JSON file: `/home/pi/.api.json`
+
+```json
+{
+    "username": "foo",
+    "password": "bar"
+}
+```
+
+I added an IFTTT trigger to Alexa that points to my API so that I can turn them on and off with my Echo's.
 
 [Additional Wiring Diagram from here](https://www.dropbox.com/s/tamanbq64qid30b/LightshowPi-Configandwire.docx?dl=0)
 
