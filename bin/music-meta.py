@@ -13,7 +13,8 @@ last = {
 data = {}
 
 def clean(str):
-    str = re.sub('[\(\[].*?[\)\]]', '', str)
+    str = re.sub('[\[].*?[\]]', '', str)
+    str = re.sub('[\(].*?[\)]', '', str)
     str = re.sub('\s+', ' ', str).strip()
     return str.encode('utf8')
 

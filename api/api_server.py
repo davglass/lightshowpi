@@ -116,7 +116,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         if cHeader:
             cookie.load(cHeader)
         
-        if cookie and cookie['session'].value == 'logged_in':
+        if cookie and 'ls_session' in cookie and cookie['ls_session'].value == 'logged_in':
             self.send_response(200)
             self.send_header('Cookie', cHeader)
             return True
@@ -127,9 +127,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         elif self.headers.getheader('Authorization') == 'Basic ' + userData:
             self.send_response(200)
             expiration = datetime.datetime.now() + datetime.timedelta(days=1)
-            cookie['session'] = 'logged_in'
-            cookie['session']['path'] = '/'
-            cookie['session']['expires'] = expiration.strftime('%a, %d-%b-%Y %H:%M:%S CST')
+            cookie['ls_session'] = 'logged_in'
+            cookie['ls_session']['path'] = '/'
+            cookie['ls_session']['expires'] = expiration.strftime('%a, %d-%b-%Y %H:%M:%S CST')
             self.wfile.write(cookie.output() + '\n')
             return True
         else:
@@ -228,7 +228,7 @@ class SimpleHttpServer():
  
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='HTTP Server')
-    parser.add_argument('--port', default=8888, type=int, help='Listening port for HTTP Server')
+    parser.add_argument('--port', default=8181, type=int, help='Listening port for HTTP Server')
     parser.add_argument('--ip', default='0.0.0.0', help='HTTP Server IP')
     args = parser.parse_args()
  

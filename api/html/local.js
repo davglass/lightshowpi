@@ -16,7 +16,7 @@ var fetch = function(url, callback) {
 };
 
 var status = function(callback) {
-    fetch('/lights/status', callback); 
+    fetch('./lights/status', callback); 
 };
 
 var update = function() {
@@ -30,6 +30,17 @@ var update = function() {
                         el.className = json[sub][key];
                     }
                 });
+                if (sub === 'temps') {
+                    var temps = json.temps;
+                    document.querySelector('#temps span').innerHTML = temps.F + '&deg; F / ' + temps.C + '&deg; C';
+                }
+                if (sub === 'cpu') {
+                    document.querySelector('#cpu span').innerHTML = json.cpu + '%';
+                }
+                if (sub === 'memory') {
+                    var mem = json.memory;
+                    document.querySelector('#mem span').innerHTML = mem.total + '/' + mem.used + '/' + mem.free;
+                }
                 if (sub === 'running') {
                     [].slice.call(document.querySelectorAll('#actions li.on')).forEach(function(el) {
                         el.className = '';
@@ -59,22 +70,22 @@ var update = function() {
             if (json.disabled) {
                 if (h1.className !== 'disabled') {
                     h1.className = 'disabled';
-                    a.href = '/show/enable';
-                    img.setAttribute('src', '/play.gif');
+                    a.href = './show/enable';
+                    img.setAttribute('src', './play.gif');
                     a.innerHTML = a.innerHTML.replace('Disable', 'Enable')
                     document.title = '(disabled) ' + document.title
                 }
             } else {
                 if (h1.className !== '') {
                     h1.className = '';
-                    a.href = '/show/disable';
-                    img.setAttribute('src', '/stop.gif');
+                    a.href = './show/disable';
+                    img.setAttribute('src', './stop.gif');
                     a.innerHTML = a.innerHTML.replace('Enable', 'Disable')
                     document.title = document.title.replace('(disabled) ', '');
                 }
             }
         }
-        fetch('/music.json', function(data) {
+        fetch('./music.json', function(data) {
             var html = 'No music currently playing..';
             if (data.title && data.artist) {
                 html = data.title + ' by ' + data.artist;

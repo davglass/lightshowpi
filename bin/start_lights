@@ -17,7 +17,18 @@ fi
 
 sudo /home/pi/bin/light.py 26
 
-$SYNCHRONIZED_LIGHTS_HOME/bin/start_music_and_lights
+log=/home/pi/tmp/show.log
+last=${log}.last
+
+if [ -f ${last} ]; then
+    rm ${last}
+fi
+
+if [ -f ${log} ]; then
+    mv ${log} ${last}
+fi
+
+$SYNCHRONIZED_LIGHTS_HOME/bin/start_music_and_lights "$@" > /home/pi/tmp/show.log 2>&1
 
 /home/pi/bin/smartthings.py
 sudo /home/pi/bin/music-meta.py &

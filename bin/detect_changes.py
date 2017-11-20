@@ -15,7 +15,7 @@ def write(str):
     sys.stdout.flush()
 
 def read(path):
-    if os.path.isfile(fileName):
+    if os.path.isfile(path):
         f = open(path, 'r')
         data = f.read().rstrip()
         f.close()
@@ -38,13 +38,13 @@ def tweet(status, action):
     finalStatus = finalStatus[0:130] #chop to 140 characters
     finalStatus = "{:s} {:s}{:s}".format(random.choice(xIcons), finalStatus, random.choice(xIcons))
     write("Tweeting {:s}".format(finalStatus))
-    try:
-        if os.path.isfile('/home/pi/tmp/lightshow_disabled'):
-            write("Tweeting is disabled..")
-        else:
+    if os.path.isfile('/home/pi/tmp/lightshow_disabled'):
+        write("Tweeting is disabled..")
+    else:
+        try:
             api.update_status(status=finalStatus)
-    except tweepy.TweepError, e:
-        write(e)
+        except:
+            write(sys.exc_info()[0])
 
 twitter = '/home/pi/.twitter.json'
 songs = '/home/pi/api/html/music.json'
