@@ -163,6 +163,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         if self.path.startswith('/controller/'):
             if self.path.startswith('cylon', 12):
                 cmd = '/home/pi/bin/pattern cylon'
+            elif self.path.startswith('step', 12):
+                cmd = '/home/pi/bin/pattern step'
             elif self.path.startswith('dance', 12):
                 cmd = '/home/pi/bin/pattern dance'
             elif self.path.startswith('flash', 12):
