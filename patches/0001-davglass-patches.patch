@@ -1,27 +1,23 @@
-From 3048beeddd1bbed842df857d63c7438ee63b9a3e Mon Sep 17 00:00:00 2001
+From 5e352cf58d219fcab2f7ad6a682efbb261f72a9a Mon Sep 17 00:00:00 2001
 From: Dav Glass <davglass@gmail.com>
 Date: Mon, 20 Nov 2017 08:34:47 -0600
 Subject: [PATCH] davglass patches
 
 ---
- .gitignore                 |  5 ++++-
- bin/play_sms               |  2 +-
- bin/start_music_and_lights |  2 +-
- bin/stop_music_and_lights  |  2 +-
- py/synchronized_lights.py  | 14 ++++++++++++--
- 5 files changed, 19 insertions(+), 6 deletions(-)
+ .gitignore                 | 3 +++
+ bin/play_sms               | 2 +-
+ bin/start_music_and_lights | 2 +-
+ bin/stop_music_and_lights  | 2 +-
+ 4 files changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/.gitignore b/.gitignore
-index 1099f93..f4c7a17 100644
+index 4c5a102..3618b22 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -13,4 +13,7 @@ install.log
- sftp-config.json
+@@ -17,3 +17,6 @@ sftp-config.json
  
- # Ignore Dolphin View settings files
--.directory
-\ No newline at end of file
-+.directory
+ # Ignore all LED configs except default
+ Led[0-9].cfg
 +
 +# Ignore pip symlink
 +pip
@@ -61,76 +57,6 @@ index 74dc566..2952ade 100755
          fi
  
      fi
-diff --git a/py/synchronized_lights.py b/py/synchronized_lights.py
-index b70889a..c4456ac 100644
---- a/py/synchronized_lights.py
-+++ b/py/synchronized_lights.py
-@@ -331,7 +331,8 @@ def audio_in():
-             streaming = subprocess.Popen(cm.lightshow.stream_command_string,
-                                          stdin=subprocess.PIPE,
-                                          stdout=subprocess.PIPE,
--                                         stderr=subprocess.PIPE)
-+                                         stderr=subprocess.PIPE,
-+                                         bufsize=-1)
-             stream_reader = lambda: streaming.stdout.read(CHUNK_SIZE)
-             outthr = Thread(target=enqueue_output, args=(streaming.stderr, outq))
- 
-@@ -377,11 +378,13 @@ def audio_in():
-     while True:
- 
-         if cm.lightshow.mode == 'stream-in':
-+            #log.debug("While true...")
-             try:
-                 streamout = outq.get_nowait().strip('\n\r')
-             except Empty:
-                 pass
-             else:
-+                #log.debug("else")
-                 print streamout
-                 if cm.lightshow.stream_song_delim in streamout:
-                     songcount+=1
-@@ -392,12 +395,15 @@ def audio_in():
-                         os.system(cm.lightshow.songname_command + ' "Now Playing ' + streamout + '"')
- 
-                 if cm.lightshow.stream_song_exit_count > 0 and songcount > cm.lightshow.stream_song_exit_count:
-+                    log.debug('stream_song_exit_count (%i) > sougcount (%i)' % cm.lightshow.stream_song_exit_count, songcount)
-                     break
- 
-         try:
-             data = stream_reader()
- 
-         except OSError as err:
-+            log.debug('OSERROR')
-+            log.debug(err)
-             if err.errno == errno.EAGAIN or err.errno == errno.EWOULDBLOCK:
-                 continue
-         try:
-@@ -406,13 +412,14 @@ def audio_in():
-             continue
- 
-         if len(data):
-+            # log.debug("len(data) is true")
-             # if the maximum of the absolute value of all samples in
-             # data is below a threshold we will disregard it
-             audio_max = audioop.max(data, 2)
-             if audio_max < 250:
-                 # we will fill the matrix with zeros and turn the lights off
-                 matrix = np.zeros(hc.GPIOLEN, dtype="float32")
--                log.debug("below threshold: '" + str(audio_max) + "', turning the lights off")
-+                #log.debug("below threshold: '" + str(audio_max) + "', turning the lights off")
-             else:
-                 matrix = fft_calc.calculate_levels(data)
-                 running_stats.push(matrix)
-@@ -424,6 +431,9 @@ def audio_in():
-             if len(matrix_buffer) > light_delay:
-                 matrix = matrix_buffer[light_delay]
-                 update_lights(matrix, mean, std)
-+        else:
-+            log.debug('len(data) is false, shairport dead?')
-+            break
- 
- 
- def load_custom_config(config_filename):
 -- 
 2.11.0
 
