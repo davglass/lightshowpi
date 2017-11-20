@@ -39,7 +39,7 @@ var update = function() {
                 }
                 if (sub === 'memory') {
                     var mem = json.memory;
-                    document.querySelector('#mem span').innerHTML = mem.total + '/' + mem.used + '/' + mem.free;
+                    document.querySelector('#mem span').innerHTML = mem.used + ' of ' + mem.total + ' used';
                 }
                 if (sub === 'running') {
                     [].slice.call(document.querySelectorAll('#actions li.on')).forEach(function(el) {
