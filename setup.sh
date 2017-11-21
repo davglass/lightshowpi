@@ -69,7 +69,7 @@ fi
 echo "Setting up davglass additions: "
 cd /home/pi
 
-echo -n "  Installing packages: "
+echo -n "   Installing packages "
 pip show tweepy 1>/dev/null
 if [ $? == 0 ]; then
 	echo "⚠ (exists)"
@@ -78,7 +78,7 @@ else
     echo "[✔]"
 fi
 
-echo -n "	Linking configs "
+echo -n "   Linking configs "
 ln -sf /home/pi/davglass/bin /home/pi/bin
 ln -sf /home/pi/davglass/api /home/pi/api
 ln -sf /home/pi/davglass/.lights.cfg /home/pi/
@@ -91,7 +91,7 @@ git config --global user.email davglass@gmail.com
 git config --global user.name davglass
 
 cd lightshowpi
-echo -n "	Applying git patches "
+echo -n "   Applying git patches "
 exists=`git branch --list davglass`
 if [ "$exists" != "" ]; then
 	git checkout master >> /tmp/davglass.log 2>&1
@@ -102,7 +102,7 @@ git am < ../davglass/patches/0001-davglass-patches.patch >> /tmp/davglass.log 2>
 
 echo "[✔]"
 
-echo -n "	Configuring shell path "
+echo -n "   Configuring shell path "
 if grep -q "PATH=" /home/pi/.bashrc; then
 	echo "⚠ (exists)"
 else
@@ -110,7 +110,7 @@ else
 	echo "[✔]"
 fi
 
-echo -n "	Configuring boot params "
+echo -n "   Configuring boot params "
 if grep -q boot\.sh /etc/rc.local; then
 	echo "⚠ (exists)"
 else
@@ -118,7 +118,7 @@ else
 	echo "[✔]"
 fi
 
-echo -n "	Creating directories "
+echo -n "   Creating directories "
 dirs=(
 	/home/pi/tmp
 	/var/log/lights
@@ -137,7 +137,7 @@ cd /home/pi
 host=`hostname`
 echo ""
 echo "✔ All done, let's play!"
-echo "	(you should probably reboot first to be safe)"
+echo "  (you should probably reboot first to be safe)"
 echo ""
-echo "	Visit: http://${host}.local:8181/"
+echo "  Visit: http://${host}.local:8181/"
 echo ""
