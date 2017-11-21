@@ -32,9 +32,9 @@ if [ -z "$SKIP_CLONE" ]; then
 		if [ -d "./${name}" ]; then
 			cd ${name}
             git checkout -q master
-            git fetch
+            git fetch -q
             if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
-                git pull -q > /dev/null 2>&1
+                git pull -q
 			    echo -n "↺ "
             else
                 case "${repo}" in 
