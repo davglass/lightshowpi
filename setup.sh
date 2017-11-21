@@ -5,8 +5,9 @@ set -e
 git=`which git`
 
 if [ "${git}" == "" ]; then
-	echo "Please apt-get install git"
-	exit 1;
+	echo -n "Installing git: "
+    sudo apt-get install -qq -y git  > /tmp/git-install.log 2>&1
+	echo " [✔]"
 fi
 
 rm -f /tmp/*.log
