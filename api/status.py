@@ -13,7 +13,7 @@ GPIO.setwarnings(False)
 GPIO.setup(31, GPIO.OUT)
 GPIO.setup(37, GPIO.OUT)
 
-pins = (11, 12, 13, 15, 16, 18, 22, 29)
+pins = (11, 12, 13, 15, 16, 18, 22, 7)
 path = '/home/pi/tmp/lightshow_command'
 
 def get_size(file):
