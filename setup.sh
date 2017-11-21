@@ -13,11 +13,16 @@ rm -f /tmp/*.log
 
 cd /home/pi
 
+this_file=`basename "$0"`
+setup_file=/home/pi/davglass/setup.sh
+
+before_md5=($(md5sum $this_file))
+
 repos=(
-	'https://togiles@bitbucket.org/togiles/lightshowpi.git'
-	'https://github.com/davglass/lightshowpi.git ./davglass'
-	'https://github.com/mikebrady/shairport-sync.git'
-       	'https://github.com/mikebrady/shairport-sync-metadata-reader.git'
+    'https://togiles@bitbucket.org/togiles/lightshowpi.git'
+    'https://github.com/davglass/lightshowpi.git ./davglass'
+    'https://github.com/mikebrady/shairport-sync.git'
+    'https://github.com/mikebrady/shairport-sync-metadata-reader.git'
 )
 
 if [ -z "$SKIP_CLONE" ]; then
@@ -33,6 +38,15 @@ if [ -z "$SKIP_CLONE" ]; then
 		fi
 	done
 	echo " done grabbing the code!"
+fi
+
+after_md5=($(md5sum $setup_file))
+
+if [ "${before_md5}" != "$after_md5" ]; then
+	echo "⚠ ${this_file} is different than ${setup_file}, calling new file.."
+    echo ""
+    ${setup_file}
+    exit
 fi
 
 cd /home/pi
@@ -78,9 +92,13 @@ else
     echo "[✔]"
 fi
 
-echo -n "   Linking configs "
-ln -sf /home/pi/davglass/bin /home/pi/bin
-ln -sf /home/pi/davglass/api /home/pi/api
+echo -n "   Linking configs & directories "
+if [ ! -s /home/pi/bin ]; then
+    ln -sf /home/pi/davglass/bin /home/pi/bin
+fi
+if [ ! -s /home/pi/api ]; then
+    ln -sf /home/pi/davglass/api /home/pi/api
+fi
 ln -sf /home/pi/davglass/.lights.cfg /home/pi/
 ln -sf /home/pi/.lights.cfg /home/pi/lightshowpi/config/overrides.cfg
 sudo ln -sf /home/pi/davglass/shairport-sync.conf /usr/local/etc/shairport-sync.conf
