@@ -2,16 +2,12 @@
 
 set -e
 
-git=`which git`
-
 echo -n "Checking for git "
-if which git; then
-	echo "[✔]"
-else
+if ! [ -x "$(command -v git)" ]; then
 	echo "not found, installing "
     sudo apt-get install -qq -y git  > /tmp/git-install.log 2>&1
-    echo "[✔]"
 fi
+echo "[✔]"
 
 rm -f /tmp/*.log
 
@@ -72,6 +68,15 @@ if [ -z "$SKIP_SHAIRPORT" ]; then
 fi
 echo "Setting up davglass additions: "
 cd /home/pi
+
+echo -n "  Installing packages: "
+pip show tweepy 1>/dev/null
+if [ $? == 0 ]; then
+	echo "⚠ (exists)"
+else
+    sudo pip install tweepy >> /tmp/install.log 2>&1
+fi
+echo "[✔]"
 
 echo -n "	Linking configs "
 ln -sf /home/pi/davglass/bin /home/pi/bin
