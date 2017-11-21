@@ -30,8 +30,25 @@ if [ -z "$SKIP_CLONE" ]; then
 	for repo in "${repos[@]}"; do
 		name=$(basename "$repo" .git)
 		if [ -d "./${name}" ]; then
-			cd ${name} && git checkout -q master && git pull -q && cd ../
-			echo -n "↺ "
+			cd ${name}
+            git checkout -q master
+            git fetch
+            if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
+                git pull -q 
+			    echo -n "↺ "
+            else
+                case "${repo}" in 
+                    *togiles*)
+                    SKIP_LIGHTSHOW_INSTALL=1
+                    ;;
+                    *shairport-sync.git*)
+                    ##only care about main repo
+                    SKIP_SHAIRPORT=1
+                    ;;
+                esac
+                echo -n " ✔ "
+            fi 
+            cd ../
 		else
 			git clone -q ${repo}
 			echo -n "✔ "
@@ -42,14 +59,18 @@ fi
 
 after_md5=($(md5sum $setup_file))
 
-echo -n "Checking if this script is up to date: "
-if [ "${before_md5}" != "$after_md5" ]; then
-	echo "⚠ outdated, calling new file.."
-    echo ""
-    ${setup_file}
-    exit
+if [ -z "$SKIP_CHECK" ]; then
+    echo -n "Checking if this script is up to date: "
+    if [ "${before_md5}" != "$after_md5" ]; then
+        echo "⚠ outdated, calling new file.."
+        echo ""
+        ${setup_file}
+        exit
+    else
+        echo " [✔]"
+    fi
 else
-    echo " [✔]"
+    echo "⚠ Skipping up to date check"
 fi
 
 cd /home/pi
@@ -58,6 +79,8 @@ if [ -z "$SKIP_LIGHTSHOW_INSTALL" ]; then
 	cd ./lightshowpi
 	./install.sh > /tmp/lightshowpi-install.log 2>&1
 	echo "[✔]"
+else
+    echo "⚠ Skipping lightshow install"
 fi
 
 if [ -z "$SKIP_SHAIRPORT" ]; then
@@ -82,7 +105,10 @@ if [ -z "$SKIP_SHAIRPORT" ]; then
 	make >> /tmp/shairport-sync-metadata-reader-install.log 2>&1
 	sudo make install >> /tmp/shairport-sync-metadata-reader-install.log 2>&1
 	echo "[✔]"
+else
+    echo "⚠ Skipping shairport install"
 fi
+
 echo "Setting up davglass additions: "
 cd /home/pi
 
