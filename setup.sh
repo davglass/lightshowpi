@@ -38,6 +38,9 @@ if [ -z "$SKIP_CLONE" ]; then
 			    echo -n "↺ "
             else
                 case "${repo}" in 
+                    *davglass*)
+                    SKIP_DAVGLASS=1
+                    ;;
                     *togiles*)
                     SKIP_LIGHTSHOW_INSTALL=1
                     ;;
@@ -109,82 +112,85 @@ else
     echo "⚠ Skipping shairport install"
 fi
 
-echo "Setting up davglass additions: "
-cd /home/pi
+if [ -z "$SKIP_DAVGLASS" ]; then
+    echo "Setting up davglass additions: "
+    cd /home/pi
 
-echo -n "   Installing packages "
-pip show tweepy 1>/dev/null
-if [ $? == 0 ]; then
-	echo "⚠ (exists)"
-else
-    sudo pip install tweepy >> /tmp/install.log 2>&1
+    echo -n "   Installing packages "
+    pip show tweepy 1>/dev/null
+    if [ $? == 0 ]; then
+        echo "⚠ (exists)"
+    else
+        sudo pip install tweepy >> /tmp/install.log 2>&1
+        echo "[✔]"
+    fi
+
+    echo -n "   Linking configs & directories "
+    if [ ! -s /home/pi/bin ]; then
+        ln -sf /home/pi/davglass/bin /home/pi/bin
+    fi
+    if [ ! -s /home/pi/api ]; then
+        ln -sf /home/pi/davglass/api /home/pi/api
+    fi
+    ln -sf /home/pi/davglass/.lights.cfg /home/pi/
+    ln -sf /home/pi/.lights.cfg /home/pi/lightshowpi/config/overrides.cfg
+    sudo ln -sf /home/pi/davglass/shairport-sync.conf /usr/local/etc/shairport-sync.conf
+
     echo "[✔]"
-fi
 
-echo -n "   Linking configs & directories "
-if [ ! -s /home/pi/bin ]; then
-    ln -sf /home/pi/davglass/bin /home/pi/bin
-fi
-if [ ! -s /home/pi/api ]; then
-    ln -sf /home/pi/davglass/api /home/pi/api
-fi
-ln -sf /home/pi/davglass/.lights.cfg /home/pi/
-ln -sf /home/pi/.lights.cfg /home/pi/lightshowpi/config/overrides.cfg
-sudo ln -sf /home/pi/davglass/shairport-sync.conf /usr/local/etc/shairport-sync.conf
+    git config --global user.email davglass@gmail.com
+    git config --global user.name davglass
 
-echo "[✔]"
+    cd lightshowpi
+    echo -n "   Applying git patches "
+    exists=`git branch --list davglass`
+    if [ "$exists" != "" ]; then
+        git checkout master >> /tmp/davglass.log 2>&1
+        git branch -D davglass >> /tmp/davglass.log 2>&1
+    fi
+    git checkout -b davglass >> /tmp/davglass.log 2>&1
+    git am < ../davglass/patches/0001-davglass-patches.patch >> /tmp/davglass.log 2>&1
 
-git config --global user.email davglass@gmail.com
-git config --global user.name davglass
+    echo "[✔]"
 
-cd lightshowpi
-echo -n "   Applying git patches "
-exists=`git branch --list davglass`
-if [ "$exists" != "" ]; then
-	git checkout master >> /tmp/davglass.log 2>&1
-	git branch -D davglass >> /tmp/davglass.log 2>&1
-fi
-git checkout -b davglass >> /tmp/davglass.log 2>&1
-git am < ../davglass/patches/0001-davglass-patches.patch >> /tmp/davglass.log 2>&1
+    echo -n "   Configuring shell path "
+    if grep -q "PATH=" /home/pi/.bashrc; then
+        echo "⚠ (exists)"
+    else
+        echo "PATH=/home/pi/bin:\$PATH" >> /home/pi/.bashrc
+        echo "[✔]"
+    fi
 
-echo "[✔]"
+    echo -n "   Configuring boot params "
+    if grep -q boot\.sh /etc/rc.local; then
+        echo "⚠ (exists)"
+    else
+        sudo sed -i '19i/home/pi/bin/boot.sh' /etc/rc.local
+        echo "[✔]"
+    fi
 
-echo -n "   Configuring shell path "
-if grep -q "PATH=" /home/pi/.bashrc; then
-	echo "⚠ (exists)"
+    echo -n "   Creating directories "
+    dirs=(
+        /home/pi/tmp
+        /var/log/lights
+        /var/log/api
+    )
+    for dir in "${dirs[@]}"; do
+        sudo mkdir -p $dir
+        sudo chmod a+w $dir
+    done
+    echo "[✔]"
 else
-    echo "PATH=/home/pi/bin:\$PATH" >> /home/pi/.bashrc
-	echo "[✔]"
+    echo "⚠ Skipping shairport install"
 fi
-
-echo -n "   Configuring boot params "
-if grep -q boot\.sh /etc/rc.local; then
-	echo "⚠ (exists)"
-else
-	sudo sed -i '19i/home/pi/bin/boot.sh' /etc/rc.local
-	echo "[✔]"
-fi
-
-echo -n "   Creating directories "
-dirs=(
-	/home/pi/tmp
-	/var/log/lights
-	/var/log/api
-)
-for dir in "${dirs[@]}"; do
-	sudo mkdir -p $dir
-	sudo chmod a+w $dir
-done
-echo "[✔]"
 
 cd /home/pi
-
 
 echo -n "   Starting services "
-./bin/stop_tweets > /tmp/setup-boot.log 2>&1
-./bin/stop_api >> /tmp/setup-boot.log 2>&1
-./bin/stop_lights >> /tmp/setup-boot.log 2>&1
-./bin/boot.sh >> /tmp/setup-boot.log 2>&1
+/home/pi/bin/stop_tweets > /tmp/setup-boot.log 2>&1
+/home/pi/bin/stop_api >> /tmp/setup-boot.log 2>&1
+/home/pi/bin/stop_lights >> /tmp/setup-boot.log 2>&1
+/home/pi/bin/boot.sh >> /tmp/setup-boot.log 2>&1
 echo "[✔]"
 
 host=`hostname`
