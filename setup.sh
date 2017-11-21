@@ -93,6 +93,14 @@ git am < ../davglass/patches/0001-davglass-patches.patch >> /tmp/davglass.log 2>
 
 echo " [✔]"
 
+echo -n "	Configuring shell path"
+if grep -q "PATH=" /home/pi/.bashrc; then
+	echo " ⚠ (exists)"
+else
+    echo "PATH=/home/pi/bin:\$PATH" >> /home/pi/.bashrc
+	echo " [✔]"
+fi
+
 echo -n "	Configuring boot params"
 if grep -q boot\.sh /etc/rc.local; then
 	echo " ⚠ (exists)"
