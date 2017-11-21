@@ -42,11 +42,14 @@ fi
 
 after_md5=($(md5sum $setup_file))
 
+echo -n "Checking if this script is up to date: "
 if [ "${before_md5}" != "$after_md5" ]; then
-	echo "⚠ ${this_file} is different than ${setup_file}, calling new file.."
+	echo "⚠ outdated, calling new file.."
     echo ""
     ${setup_file}
     exit
+else
+    echo " [✔]"
 fi
 
 cd /home/pi
