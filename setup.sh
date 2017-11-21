@@ -75,8 +75,8 @@ if [ $? == 0 ]; then
 	echo "⚠ (exists)"
 else
     sudo pip install tweepy >> /tmp/install.log 2>&1
+    echo "[✔]"
 fi
-echo "[✔]"
 
 echo -n "	Linking configs "
 ln -sf /home/pi/davglass/bin /home/pi/bin
