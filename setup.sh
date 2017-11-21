@@ -13,7 +13,7 @@ rm -f /tmp/*.log
 
 cd /home/pi
 
-this_file=`basename "$0"`
+this_file=$(readlink -f $0)
 setup_file=/home/pi/davglass/setup.sh
 
 before_md5=($(md5sum $this_file))
