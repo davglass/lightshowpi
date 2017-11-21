@@ -132,7 +132,13 @@ echo "[✔]"
 
 cd /home/pi
 
+
+echo -n "   Starting services"
+./bin/stop_tweets > /tmp/setup-boot.log 2>&1
+./bin/stop_api >> /tmp/setup-boot.log 2>&1
+./bin/stop_lights >> /tmp/setup-boot.log 2>&1
 ./bin/boot.sh >> /tmp/setup-boot.log 2>&1
+echo "[✔]"
 
 host=`hostname`
 echo ""
