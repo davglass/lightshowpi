@@ -1,15 +1,26 @@
 (function() {
 
-var fetch = function(url, callback) {
-    var oReq = new XMLHttpRequest();
-    oReq.addEventListener('load', function() {
-        callback(JSON.parse(this.responseText));
-    });
-    oReq.addEventListener('error', function() {
+var error = function(url, callback) {
         console.log('Fetch failed, trying again in 1 second');
+	show('Server appears to be offline..');
         setTimeout(function() {
             fetch(url, callback);
         }, 1000);
+};
+
+var fetch = function(url, callback) {
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener('load', function() {
+	var json = {};
+	try {
+		json = JSON.parse(this.responseText);
+	} catch (e) {
+		return error(url, callback);
+	}
+        callback(json);
+    });
+    oReq.addEventListener('error', function() {
+	error(url, callback);
     });
     oReq.open('GET', url);
     oReq.send();
@@ -61,6 +72,8 @@ var update = function() {
                             break;
                     }
                     document.querySelector('small em').innerHTML = 'Last Action was ' + json[sub].since;
+		    var uptime = json[sub].uptime.split('.')[0];
+		    document.querySelector('#uptime span').innerHTML = uptime;
                 }
             });
             var h1 = document.querySelector('h1');

@@ -152,6 +152,12 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         if os.path.isfile(fileName):
             return self.sendFile(fileName)
 
+        if self.path.startswith('/admin/'):
+            if self.path.startswith('reboot', 7):
+                cmd = '/home/pi/bin/reboot'
+            elif self.path.startswith('shutdown', 7):
+                cmd = '/home/pi/bin/shutdown'
+            
         if self.path.startswith('/lights/'):
             if self.path.startswith('status', 8):
                 return self.json(200, getStatus())

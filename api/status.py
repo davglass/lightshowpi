@@ -6,6 +6,7 @@ import subprocess
 import os
 import time
 import math
+from datetime import timedelta
 
 
 GPIO.setmode(GPIO.BOARD)
@@ -40,6 +41,12 @@ def getCPUtemperature():
     res = os.popen('vcgencmd measure_temp').readline()
     return(res.replace('temp=', '').replace("'C\n",""))
 
+def getUptime():
+	with open('/proc/uptime', 'r') as f:
+	    uptime_seconds = float(f.readline().split()[0])
+	    uptime_string = str(timedelta(seconds = uptime_seconds))
+	return uptime_string
+
 def status():
     f = open(path, 'r')
     command = f.read().rstrip()
@@ -61,6 +68,7 @@ def status():
         },
         "disabled": os.path.isfile('/home/pi/tmp/lightshow_disabled'),
         'running': {
+	    'uptime': getUptime(),
             'since': time.ctime(os.path.getmtime(path)),
             'command': command
         },
