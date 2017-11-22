@@ -114,8 +114,8 @@ if [ -z "$SKIP_DAVGLASS" ]; then
     cd /home/pi
 
     echo -n "   Installing packages "
-    pip show tweepy 1>/dev/null
-    if [ $? == 0 ]; then
+    
+    if pip show tweepy 1>/dev/null; then
         echo "⚠ (exists)"
     else
         sudo pip install tweepy >> /tmp/install.log 2>&1
