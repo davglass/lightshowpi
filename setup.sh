@@ -38,9 +38,6 @@ if [ -z "$SKIP_CLONE" ]; then
 			    echo -n "↺ "
             else
                 case "${repo}" in 
-                    *davglass*)
-                    SKIP_DAVGLASS=1
-                    ;;
                     *togiles*)
                     SKIP_LIGHTSHOW_INSTALL=1
                     ;;
