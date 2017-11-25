@@ -2,12 +2,14 @@
 
 set -e
 
-echo -n "Checking for git "
+stamp=`date -u`
+echo "[$stamp] Starting davglass lightshowpi setup script."
+
 if ! [ -x "$(command -v git)" ]; then
-	echo "not found, installing "
+	echo -n "Git not found, installing "
     sudo apt-get install -qq -y git  > /tmp/git-install.log 2>&1
+    echo "[✔]"
 fi
-echo "[✔]"
 
 rm -f /tmp/*.log
 
@@ -72,14 +74,14 @@ if [ -z "$SKIP_CHECK" ]; then
     else
         echo " [✔]"
     fi
+    if [ -z "$HAS_UPDATE" ]; then
+        echo "Update detected, running full setup.."
+        unset SKIP_LIGHTSHOW_INSTALL;
+        unset SKIP_DAVGLASS;
+        unset SKIP_SHAIRPORT;
+    fi
 else
     echo "⚠ Skipping up to date check"
-fi
-
-if [ -z "$HAS_UPDATE" ]; then
-    unset SKIP_LIGHTSHOW_INSTALL;
-    unset SKIP_DAVGLASS;
-    unset SKIP_SHAIRPORT;
 fi
 
 cd /home/pi
@@ -175,6 +177,10 @@ if [ -z "$SKIP_DAVGLASS" ]; then
         echo "[✔]"
     fi
 
+    echo -n "   Installing setup crontab "
+    crontab /home/pi/davglass/crontab.txt
+    echo "[✔]"
+
     echo -n "   Creating directories "
     dirs=(
         /home/pi/tmp
@@ -187,7 +193,7 @@ if [ -z "$SKIP_DAVGLASS" ]; then
     done
     echo "[✔]"
 else
-    echo "⚠ Skipping shairport install"
+    echo "⚠ Skipping davglass install"
 fi
 
 cd /home/pi

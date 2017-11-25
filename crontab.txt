@@ -1,0 +1,1 @@
+0 22 * * * /home/pi/davglass/setup.sh > /home/pi/tmp/crontab.log
