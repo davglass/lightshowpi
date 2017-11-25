@@ -8,7 +8,7 @@ import json
 import platform
 import tweepy
 import random
-from get_artist import find_artist
+#from get_artist import find_artist
 
 def write(str):
     sys.stdout.write(str + '\n')
@@ -129,7 +129,7 @@ while True:
         music = "🔇  No music currently playing.."
         if 'title' in data and 'artist' in data:
             music = "{:s}  {:s} by {:s}".format(random.choice(mIcons), data['title'], data['artist'])
-            write("Found: {:s}".format(find_artist(data['artist'])))
+            #write("Found: {:s}".format(find_artist(data['artist'])))
         
     if commandsStamp != commandsStampNow and commandsValue != commandsValueNow:
         cmd = read(commands)
