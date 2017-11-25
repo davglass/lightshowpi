@@ -181,6 +181,10 @@ if [ -z "$SKIP_DAVGLASS" ]; then
     crontab /home/pi/davglass/crontab.txt
     echo "[✔]"
 
+    echo -n "  Performing cleanup "
+    rm /home/pi/tmp/show.*.log
+    echo "[✔]"
+
     echo -n "   Creating directories "
     dirs=(
         /home/pi/tmp
