@@ -182,7 +182,7 @@ if [ -z "$SKIP_DAVGLASS" ]; then
     echo "[✔]"
 
     echo -n "  Performing cleanup "
-    rm /home/pi/tmp/show.*.log
+    rm -f /home/pi/tmp/show.log*
     echo "[✔]"
 
     echo -n "   Creating directories "
