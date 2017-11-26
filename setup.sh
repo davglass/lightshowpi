@@ -36,7 +36,6 @@ if [ -z "$SKIP_CLONE" ]; then
             git checkout -q master
             git fetch -q
             if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
-                HAS_UPDATE=1
                 git pull -q
 			    echo -n "↺ "
             else
@@ -60,8 +59,6 @@ if [ -z "$SKIP_CLONE" ]; then
 	echo " done grabbing the code!"
 fi
 
-export HAS_UPDATE;
-
 after_md5=($(md5sum $setup_file))
 
 if [ -z "$SKIP_CHECK" ]; then
@@ -73,12 +70,6 @@ if [ -z "$SKIP_CHECK" ]; then
         exit
     else
         echo " [✔]"
-    fi
-    if [ -z "$HAS_UPDATE" ]; then
-        echo "Update detected, running full setup.."
-        unset SKIP_LIGHTSHOW_INSTALL;
-        unset SKIP_DAVGLASS;
-        unset SKIP_SHAIRPORT;
     fi
 else
     echo "⚠ Skipping up to date check"
