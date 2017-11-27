@@ -11,11 +11,17 @@ var error = function(url, callback) {
 var fetch = function(url, callback) {
     var oReq = new XMLHttpRequest();
     oReq.addEventListener('load', function() {
+	var cType = oReq.getResponseHeader('content-type').split(';')[0];
 	var json = {};
-	try {
-		json = JSON.parse(this.responseText);
-	} catch (e) {
-		return error(url, callback);
+	if (cType.indexOf('json') > -1) {
+		try {
+			json = JSON.parse(this.responseText);
+		} catch (e) {
+			return error(url, callback);
+		}
+	}
+	if (cType.indexOf('text') > -1) {
+		json = this.responseText;
 	}
         callback(json);
     });
@@ -124,15 +130,50 @@ var show = function(str) {
     }, 3000);
 };
 
+var showLog = function(url, text) {
+	if (url.indexOf('logs/setup') === -1) {
+		text = text.split('\n').reverse().join('\n');
+	}
+	var l = document.getElementById('logs');
+	var pre = logs.querySelector('pre');
+	pre.innerHTML = text;
+	l.style.top = (document.documentElement.scrollTop + 10) + 'px';
+	var w = 500;
+	if (window.innerWidth < w) {
+		w = document.innerWidth - 10;
+	}
+	l.style.width = w + 'px';
+	l.className = '';
+};
+
 document.getElementById('actions').addEventListener('click', function(e) {
     if (e.target.tagName === 'A') {
         e.preventDefault();
         e.stopPropagation();
-        fetch(e.target.href, function(json) {
-            show(json.command + ' was executed..');
-            update();  
-        });
+        var run = function() {
+            fetch(e.target.href, function(json) {
+                if (typeof json === 'string') {
+                    showLog(e.target.href, json);
+                } else {
+                    show(json.command + ' was executed..');
+                    update();  
+                }
+            });
+        };
+        if (e.target.parentNode.className === 'confirm') {
+            if (confirm('Are you sure you want to do this?')) {
+                run();
+            }
+            return;
+        }
+        run();
     }
-})
+});
+
+document.querySelector('#logs h3 a').addEventListener('click', function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	document.getElementById('logs').className = 'hide';
+});
 
 })();

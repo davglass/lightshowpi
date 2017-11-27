@@ -78,6 +78,42 @@ a:hover {
     opacity: 0
 }
 
+#logs {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #fff;
+    height: 600px;
+    width: 500px;
+    border: 2px solid black;
+}
+
+#logs h3 {
+    background-color: #7e0b1b;
+    color: white;
+    margin: 0;
+    padding: 8px;
+}
+
+#logs h3 a {
+    color: white;
+    border: none;
+    float: right;
+}
+
+#logs pre {
+    font-family: monospace;
+    font-size: small;
+    margin: 10px;
+    height: 90%;
+    width: 95%;
+    overflow: scroll;
+}
+
+#logs.hide {
+    display: none;
+}
+
 #playing {
     margin: auto;
     border: 1px solid black;

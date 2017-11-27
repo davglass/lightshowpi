@@ -13,4 +13,4 @@ sudo touch ${base}/error.log
 sudo chmod -R a+w ${base}
 sudo chown -R pi ${base}/*.log
 
-sudo python /home/pi/api/api_server.py 1>${base}/access.log 2>${base}/error.log &
+sudo python /home/pi/api/api_server.py 1>>${base}/access.log 2>>${base}/error.log &

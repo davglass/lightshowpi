@@ -73,11 +73,18 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     def json(self, status, data):
         data = json.dumps(data, indent=4, sort_keys=True)
         self.send_response(status)
-        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
         self.send_header('Content-Length', len(data))
         self.end_headers()
         self.wfile.write(data)
         return
+
+    def sendText(self, data):
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain; charset=utf-8')
+        self.send_header('Content-Length', len(data))
+        self.end_headers()
+        self.wfile.write(data)
 
     def sendFile(self, name):
         data = read(name)
@@ -87,7 +94,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             data = data.replace('{{hostname}}', platform.node())
         
         self.send_response(200)
-        self.send_header('Content-Type', cType)
+        self.send_header('Content-Type', cType + '; charset=utf-8')
         self.send_header('Content-Length', len(data))
         self.end_headers()
         self.wfile.write(data)
@@ -152,7 +159,22 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         if os.path.isfile(fileName):
             return self.sendFile(fileName)
 
-        if self.path.startswith('/admin/'):
+        if self.path.startswith('/logs/'):
+	    text = 'no log data available'
+	    logFile = None
+            if self.path.startswith('setup', 6):
+		logFile = '/home/pi/tmp/crontab.log'
+            if self.path.startswith('commands', 6):
+		logFile = '/var/log/api/commands.log'
+            if self.path.startswith('access', 6):
+		logFile = '/var/log/api/access.log'
+
+	    if logFile and os.path.isfile(logFile):
+		text = read(logFile)
+	    return self.sendText(text)
+        
+	
+	if self.path.startswith('/admin/'):
             if self.path.startswith('reboot', 7):
                 cmd = '/home/pi/bin/reboot'
             elif self.path.startswith('shutdown', 7):
