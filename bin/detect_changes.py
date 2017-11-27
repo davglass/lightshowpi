@@ -35,8 +35,8 @@ def tweet(status, action):
         verb = random.choice(offList)
     
     finalStatus = "{:s} {:s}".format(status, verb)
-    finalStatus = finalStatus[0:130] #chop to 140 characters
-    finalStatus = "{:s} {:s}{:s}".format(random.choice(xIcons), finalStatus, random.choice(xIcons))
+    #finalStatus = finalStatus[0:130] #chop to 140 characters
+    finalStatus = "{:s} {:s} {:s}".format(random.choice(xIcons), finalStatus, random.choice(xIcons))
     write("Tweeting {:s}".format(finalStatus))
     if os.path.isfile('/home/pi/tmp/lightshow_disabled'):
         write("Tweeting is disabled..")
@@ -128,7 +128,7 @@ while True:
 
         music = "🔇  No music currently playing.."
         if 'title' in data and 'artist' in data:
-            music = "{:s}  {:s} by {:s}".format(random.choice(mIcons), data['title'], data['artist'])
+            music = "{:s} {:s} by {:s}".format(random.choice(mIcons), data['title'], data['artist'])
             #write("Found: {:s}".format(find_artist(data['artist'])))
         
     if commandsStamp != commandsStampNow and commandsValue != commandsValueNow:
