@@ -22,7 +22,7 @@ airPin = 25
 config = ConfigParser.ConfigParser()
 config.readfp(open('/home/pi/.lights.cfg'))
 
-if config.get('hardware', 'gpio_pins'):
+if config.has_section('hardware') and config.has_option('hardware', 'gpio_pins'):
     p = config.get('hardware', 'gpio_pins')
     pins = tuple(map(int, p.split(',')))
 
