@@ -43,6 +43,12 @@ var update = function() {
                 Object.keys(json[sub]).forEach(function(key) {
                     var id = sub + '_' + key;
                     var el = document.getElementById(id);
+                    if (!el && sub === 'pins') {
+                        el = document.createElement('li');
+                        el.id = id;
+                        el.innerHTML = key;
+                        document.getElementById('lights').appendChild(el);
+                    }
                     if (el) {
                         el.className = json[sub][key];
                     }

@@ -7,14 +7,30 @@ import os
 import time
 import math
 from datetime import timedelta
+import ConfigParser
 
+wipins = (11,12,13,15,16,18,22,7,3,5,24,26,19,21,23,8,10,False,False,False,False,29,31,33,35,37,32,36,38,40)
+
+def getPin(id):
+    return wipins[id]
+
+pins = (0, 1, 2, 3, 4, 5, 6, 7)
+
+bootPin = 22
+airPin = 25
+
+config = ConfigParser.ConfigParser()
+config.readfp(open('/home/pi/.lights.cfg'))
+
+if config.get('hardware', 'gpio_pins'):
+    p = config.get('hardware', 'gpio_pins')
+    pins = tuple(map(int, p.split(',')))
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setup(31, GPIO.OUT)
-GPIO.setup(37, GPIO.OUT)
+GPIO.setup(getPin(bootPin), GPIO.OUT)
+GPIO.setup(getPin(airPin), GPIO.OUT)
 
-pins = (11, 12, 13, 15, 16, 18, 22, 7)
 path = '/home/pi/tmp/lightshow_command'
 
 def get_size(file):
@@ -74,13 +90,13 @@ def status():
         },
         'pins': {},
         'lights': {
-            'boot': 'on' if GPIO.input(31) else 'off',
-            'pattern': 'on' if GPIO.input(37) else 'off'
+            'boot': 'on' if GPIO.input(getPin(bootPin)) else 'off',
+            'pattern': 'on' if GPIO.input(getPin(airPin)) else 'off'
         }
     }
     for id, pin in enumerate(pins):
-        GPIO.setup(pin, GPIO.OUT)
-        status['pins'][id+1] = 'on' if GPIO.input(pin) else 'off'
+        GPIO.setup(getPin(pin), GPIO.OUT)
+        status['pins'][id+1] = 'on' if GPIO.input(getPin(pin)) else 'off'
 
     return status
 
