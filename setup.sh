@@ -30,9 +30,14 @@ repos=(
 if [ -z "$SKIP_CLONE" ]; then
 	echo -n "Cloning all the repos needed: "
 	for repo in "${repos[@]}"; do
+        STASHED=0
 		name=$(basename "$repo" .git)
 		if [ -d "./${name}" ]; then
 			cd ${name}
+	        if [[ -n $(git status --porcelain) ]]; then
+                STASHED=1
+                git stash --quiet
+            fi
             git checkout -q master
             git fetch -q
             if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
@@ -50,6 +55,9 @@ if [ -z "$SKIP_CLONE" ]; then
                 esac
                 echo -n " ✔ "
             fi 
+            if [ "${STASHED}" == 1 ]; then
+                git stash pop --quiet
+            fi
             cd ../
 		else
 			git clone -q ${repo}
