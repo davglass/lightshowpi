@@ -10,6 +10,8 @@ Parts List
 * [Male to Male Jumper Wires](http://a.co/eib2iWj)
 * [SainSmart 8-Channel 5V Solid State Relay Module Board](http://a.co/4ZzxAcb)
 * [8 Port Terminal Block](http://a.co/hs2jNlu)
+* [8 port fuse block](http://a.co/9fh1oIQ)
+* [2 amp fast acting glass fuses](http://a.co/i7ENiBY)
 * [3 spools 14 AWG solid wire](http://a.co/1X2Rdgd) (I used white, black and red)
 * [3 electrical boxes](http://a.co/f1oh1xX)
 * [Single Outlet Cover]( http://a.co/c8Ct4bO)
@@ -34,6 +36,7 @@ Wiring
   * This will make the four outlets turn into 8 circuits
 * Create a looped circuit on the terminal block like the photos
 * Run a single red from each of the load sides of the outlets to the relay
+  * Here is where I injected the fuse block to protect the relays
 * Run a black from the relay to the terminal block
 
 Pins
