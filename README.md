@@ -49,6 +49,14 @@ Usage
 
 Now, install Raspian on your pi, install [LightShowPi](http://lightshowpi.org/)
 
+
+Automatic Install/Updates
+
+Last year I added a `setup.sh` script to automate the installation of the software and keep it up to date.
+
+After you install the OS from above, simply clone this repo into `/home/pi/davglass/` and run `./setup.sh`.
+It will install a bunch of stuff and you will have a working lightshow as well as my custom additions.
+
 Config
 ------
 
