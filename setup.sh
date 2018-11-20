@@ -73,6 +73,7 @@ if [ -z "$SKIP_CHECK" ]; then
     echo -n "Checking if this script is up to date: "
     if [ "${before_md5}" != "$after_md5" ]; then
         echo "⚠ outdated, calling new file.."
+        echo "b(${before_md5}) a(${after_md5})"
         echo ""
         ${setup_file}
         exit
