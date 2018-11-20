@@ -13,8 +13,6 @@ fi
 
 rm -f /tmp/*.log
 
-cd /home/pi
-
 this_file=$(readlink -f $0)
 setup_file=/home/pi/davglass/setup.sh
 
@@ -26,6 +24,9 @@ repos=(
     'https://github.com/mikebrady/shairport-sync.git'
     'https://github.com/mikebrady/shairport-sync-metadata-reader.git'
 )
+
+#start at the home dir of the pi user..
+cd /home/pi
 
 if [ -z "$SKIP_CLONE" ]; then
 	echo -n "Cloning all the repos needed: "
@@ -73,7 +74,6 @@ if [ -z "$SKIP_CHECK" ]; then
     echo -n "Checking if this script is up to date: "
     if [ "${before_md5}" != "$after_md5" ]; then
         echo "⚠ outdated, calling new file.."
-        echo "b(${before_md5}) a(${after_md5})"
         echo ""
         ${setup_file}
         exit
