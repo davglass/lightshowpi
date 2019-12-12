@@ -13,10 +13,11 @@ last = {
 data = {}
 
 def clean(str):
+    str = str.decode('utf-8')
     str = re.sub('[\[].*?[\]]', '', str)
     str = re.sub('[\(].*?[\)]', '', str)
     str = re.sub('\s+', ' ', str).strip()
-    return str.encode('utf8')
+    return str.encode('utf-8')
 
 process = subprocess.Popen(['/home/pi/bin/pipe_music_meta'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 while True:
