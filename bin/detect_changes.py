@@ -128,7 +128,7 @@ while True:
 
         music = "🔇  No music currently playing.."
         if 'title' in data and 'artist' in data:
-            music = "{:s} {:s} by {:s}".format(random.choice(mIcons), data['title'], data['artist'])
+            music = "{:s} {:s} by {:s}".format(random.choice(mIcons), data['title'].encode('utf-8'), data['artist'].encode('utf-8'))
             #write("Found: {:s}".format(find_artist(data['artist'])))
         
     if commandsStamp != commandsStampNow and commandsValue != commandsValueNow:
